@@ -3,22 +3,22 @@ import User from "./User";
 
 function App() {
   const [users, setUsers] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
-
-    try {
-      fetch("https://jsonplaceholder.typicode.com/users")
-        .then((usersData) => usersData.json())
-        .then(setUsers);
-    } catch (err) {
-      Error("Users not loaded");
-    } finally {
-      () => {
+    async function fetchData() {
+      try {
+        const data = await fetch("https://jsonplaceholder.typicode.com/users");
+        const usersData = await data.json();
+        setUsers(usersData);
+      } catch (err) {
+        alert("Users not loaded");
+      } finally {
         setIsLoading(false);
-      };
+      }
     }
+    fetchData();
   }, []);
 
   return (
